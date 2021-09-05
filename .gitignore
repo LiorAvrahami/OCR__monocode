@@ -1,0 +1,7 @@
+.*
+!.gitignore
+*.pyc
+__pycache__
+dist
+*.egg-info
+*db.pickle

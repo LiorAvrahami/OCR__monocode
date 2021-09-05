@@ -1,0 +1,22 @@
+1 run the python script "code_to_to_print.py".
+2 code_to_print.py will ask for to select a folder/file for printing.
+3 code_to_print.py will create a text file called "temp_out.txt" and will attempt
+   to open it with notepad or gedit or something. if it can't succede in opening the file,   you need to open it manually. the files location is detailed by code_to_to_print.py at the end of the run.
+4 once in the text editor, you just need to print it. it is essential that you print in a UNIFORMLY SPACED FONT. so that the frame is rectangular.
+
+   recomended operatus for Windows: copy the entire content (ctrl+A then ctrl+C), paste it into a word document, and change the font to be Consolas:8. in the toolbar, enter the "PAGE LAYOUT" tab and change two things:
+   change the indent and spacing so that the indent before,indent after,spacing before, and spacing after are all zero.
+   change the margins so that in each page the frame fits inside the page and forms a nice, neat rectangular frame of +'es around your text.
+
+   recomended operatus for linux: I had never done this myself, so there is no recomended operatus for linux. you need to find a way to print the entire content of the output file. the output file does contain peage break chericters betwean the pages. so it should work even if you just print it from some primary text editor. just make sure to use some uniformly space font, and that the frames each fit inside a single page.
+      (you would be wize to use a font that was already calibrated, Consolas:8 for example, otherwize you would need to calibrate the reading proccess of this new font yourself. this is an automattic process that really isn't that hard, but still you would need to print the calibration page and calibrate with it and so on).
+
+1* you can change the number of letters in each row and column by cahnging the "page_width" and "page_height" values to be what you want. they start out as - 125,77.
+
+
+
+HOW TO CALIBRATE A NEW FONT:
+1 run "code_to_to_print.py" and print in the manner specified above, on the file called "calibration.txt".
+2 scan the printed paper and pass it to the calibration software.
+3 the calibration software might need some help in detecting the corners of the frame.
+4 once the calibration software is finished calibrating, it will create a new file with a  dbk extension, and should automatically add the new calibrated font.

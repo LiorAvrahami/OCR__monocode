@@ -1,0 +1,4 @@
+
+why is fit score so low for good scans?
+
+find num of rows, columnes

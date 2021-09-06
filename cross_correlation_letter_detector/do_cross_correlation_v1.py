@@ -42,7 +42,7 @@ def get_grid_letter_match_results(path,letters_db,frame_char,corner_char):
 
     document_image = plt.imread(path)[:, :, 0].astype(float)
 
-    frame_char_image = np.mean(letters_db[frame_char][10:20], axis=0)
+    frame_char_image = letters_db[frame_char]
     frame_char_fit = calculate_normalised_crosscorrelation(document_image, frame_char_image)
     frame_char_fit_g = gaussian_filter(frame_char_fit ** 4, 5)
 
@@ -80,7 +80,7 @@ def get_grid_letter_match_results(path,letters_db,frame_char,corner_char):
     letters = np.array(list(letters_db.keys()))
     grid_letter_match_results = np.full((num_of_columns, num_of_rows, len(letters),), np.nan, np.float)
     for letter_index, letter_char in enumerate(tqdm.tqdm(letters, position=0)):
-        letter_image = letters_db[letter_char][0]
+        letter_image = letters_db[letter_char]
         char_fit_arr = calculate_normalised_crosscorrelation(document_image, letter_image)
 
         grid_iterator = grid_iterator_from_corners(

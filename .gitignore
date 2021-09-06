@@ -4,4 +4,4 @@
 __pycache__
 dist
 *.egg-info
-*db.pickle
+*db_full.pickle

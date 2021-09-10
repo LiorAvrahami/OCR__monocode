@@ -32,7 +32,7 @@ output_path = inquire_output_path("./results") if user_arguments.outputpath is N
 # if user wants to export some of their file system
 if user_arguments.exportfilesystem:
     from format_files_to_be_printed import code_to_print
-    code_to_print.run(input_path,output_path)
+    code_to_print.run(input_path,output_path,b_has_frame = user_arguments.frame)
     quit(0)
 
 # note selected ocr mechanism
@@ -47,13 +47,11 @@ if user_arguments.fontselect is not None:
 else:
     selected_font_settings = inquire_font()
 
-
 out_str = ""
 def process_image_to_text(path):
     global out_str
-    #TODO implement user_arguments.hasnoframe
     if ocr_Mechanism == "ccr":
-        out_str += process_image_to_text_with_ccr(path,selected_font_settings)
+        out_str += process_image_to_text_with_ccr(path,selected_font_settings,b_has_frame= user_arguments.frame)
     if ocr_Mechanism == "tesseract":
         out_str += process_image_to_text_with_tesseract(path)
     if out_str[-1] != "\n":

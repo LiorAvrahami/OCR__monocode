@@ -1,7 +1,7 @@
 import os,copy,efipy
 __version__ = "1.0"
 
-def run(input_path,output_path):
+def run(input_path,output_path,b_has_frame):
     excluded_file_types = [".docx",".wbk"]
 
     page_width = 125
@@ -40,10 +40,16 @@ def run(input_path,output_path):
         lines_caped_copy = lines_caped_copy[page_height:]
 
     # add frame to pages
-    top_frame = "O" + "X"*page_width + "O"
-    bottom_frame = top_frame
-    right_frame_char = "X"
-    left_frame_char = "X"
+    if b_has_frame:
+        top_frame = "O" + "X"*page_width + "O"
+        bottom_frame = top_frame
+        right_frame_char = "X"
+        left_frame_char = "X"
+    else:
+        top_frame = ""
+        bottom_frame = top_frame
+        right_frame_char = ""
+        left_frame_char = ""
     for page in pages:
         page += [""]*(page_height - len(page))
 
@@ -52,8 +58,10 @@ def run(input_path,output_path):
             page[i] = left_frame_char + page[i] + " "*(page_width - len(page[i])) + right_frame_char
 
         # top bottom bounds
-        page.insert(0,top_frame)
-        page.append(bottom_frame)
+        if top_frame != "":
+            page.insert(0,top_frame)
+        if bottom_frame != "":
+            page.append(bottom_frame)
 
     final_out = "\f"
     for page in pages:

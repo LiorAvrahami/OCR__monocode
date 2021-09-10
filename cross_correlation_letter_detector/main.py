@@ -3,13 +3,12 @@ import typing
 from cross_correlation_letter_detector.do_cross_correlation_v1 import do_ccr_v1
 import pickle
 import os
-
-fonts_in_inventory = ["Consolas8_600dpi"] #todo - load automatically
+from handle_font_book_keepeing import get_list_of_all_fonts_in_inventory
 
 def do_ccr(path,font=None,frame_character = "X",corner_charicter="O") -> (float,str):
     if font is None:
         max_score_font = (float("-inf"),None,None)
-        for font_size in fonts_in_inventory:
+        for font_size in get_list_of_all_fonts_in_inventory():
             total_score,text = do_ccr(path,font_size)
             if total_score > max_score_font[0]:
                 max_score_font = (total_score,text,font_size)

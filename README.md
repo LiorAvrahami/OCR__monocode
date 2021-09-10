@@ -1,4 +1,4 @@
-# OCR_momocode
+# OCR_monocode
 
 ## introduction
 in this project I implement a fully functional cross-correlation based *optical character recognition* program.  **this program is limited to monospace fonts**, and has a hard emphasis on precision. the goal is for this program to, with high certainty, be able to read a printed piece of paper full of gibberish, weird characters, and multiple consecutive spaces, and save it to a .txt file on the computer.   
@@ -22,26 +22,29 @@ atributes:
 --exportfilesystem:
    explanation: if this atribute is added then no OCR will be used, intead, the selected input file or folder that represents the root of a file system, will be converted to a single .txt file that can be printed, and can later be scanned and mapped back to the origional file system hyrarchy
 
--ip, --inputpath:
-   -ip [path to folder, or path to single file]
+--singletextfileoutput"
+   explanation: if selected output will be a single .txt file, no file system interpretation will be done. (so when using this flag there is no limmit on use of $ char)
+
+-i, --inputpath:
+   -i [path to folder, or path to single file]
    example:
       python OCR_monocode.py -ip ../folder_with_images
 
--op, --outputpath:
-   -op [path to to put programs output]
+-o, --outputpath:
+   -o [path to to put programs output]
    example:
       python OCR_monocode.py -op ../out_put_folder
 
--fs, --fontselect:
-   -fs {[font name] [font size] [scanner resolution]dpi}
+-f, --fontselect:
+   -f [font name] [font size] [scanner resolution]dpi
    example:
-      python OCR_monocode.py -fs {Consols 8 600dpi}
+      python OCR_monocode.py -fs Consols 8 600dpi
 
--hf, --hasframe:
-   -hf [true or false, case insensative]
+-h, --hasnoframe:
+   -h [true or false, case insensative]
    explanation: there is an option to surround the paper with a frame of X, to increase percision. if using "--exportfilesystem" then the correct frame will be automatically added to the text files. this frame will not be in the final .txt files.
    
--ut, --usetesseract:
+-t, --usetesseract:
    explanation: use tesseract instead of the cross correlation ccr developed in this project.
 ```
 if some attribute other than exportfilesystem or usetesseract is not given, a nice prompt-toolkit based UI will ask you for this information. it is recommended to use this UI when possible instead of the command line arguments for the sole reason that it is nicer.

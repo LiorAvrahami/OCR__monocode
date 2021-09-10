@@ -1,7 +1,7 @@
 # OCR_momocode
 
 ## introduction
-in this project I implement a fully functional cross-correlation based *optical character recognition* program. ** this program is limited to monospace fonts **, and has a hard emphasis on precision. the goal is for this program to, with high certainty, be able to read a printed piece of paper full of gibberish, weird characters, and multiple consecutive spaces, and save it to a .txt file on the computer.   
+in this project I implement a fully functional cross-correlation based *optical character recognition* program.  **this program is limited to monospace fonts**, and has a hard emphasis on precision. the goal is for this program to, with high certainty, be able to read a printed piece of paper full of gibberish, weird characters, and multiple consecutive spaces, and save it to a .txt file on the computer.   
 this program dose require some set up. in order for it to be able to parse some printed text with some font, and some scan resolution, a calibration page must be printed, scanned, and given to the program. the program will create a database file, for this specific font, and scan settings.
 
 ## compared to other ocr programs

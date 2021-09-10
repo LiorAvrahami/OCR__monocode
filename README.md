@@ -45,3 +45,6 @@ if some attribute other than exportfilesystem is not given, a nice prompt-toolki
 > if -fs is not given, the UI will ask you to select a font out of all options available (the options for which a calibration file was made). you can also choose the option "find out for me", which will have the computer run with all possible font settings, and use the one with the best fit.  
 
 *it is usually recommended to print and scan files with a frame when possible.
+
+## TODO
+progress of this project is shown in [The TODO file](./TODO.md)

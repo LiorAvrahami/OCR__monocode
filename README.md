@@ -16,7 +16,7 @@ this is done by mapping the howl file system to a single text file, which can be
 
 ## usage
 ```
-python \[path directories\]/OCR_monocode [atributes]
+python \[path directories\]/OCR_monocode.py [atributes]
 
 atributes:
 --exportfilesystem:
@@ -25,17 +25,17 @@ atributes:
 -ip, --inputpath:
    -ip [path to folder, or path to single file]
    example:
-      python OCR_monocode -ip ../folder_with_images
+      python OCR_monocode.py -ip ../folder_with_images
 
 -op, --outputpath:
    -op [path to to put programs output]
    example:
-      python OCR_monocode -op ../out_put_folder
+      python OCR_monocode.py -op ../out_put_folder
 
 -fs, --fontselect:
    -fs {[font name] [font size] [scanner resolution]dpi}
    example:
-      python OCR_monocode -fs {Consols 8 600dpi}
+      python OCR_monocode.py -fs {Consols 8 600dpi}
 
 -hf, --hasframe:
    -hf [true or false, case insensative]

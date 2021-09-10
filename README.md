@@ -40,8 +40,11 @@ atributes:
 -hf, --hasframe:
    -hf [true or false, case insensative]
    explanation: there is an option to surround the paper with a frame of X, to increase percision. if using "--exportfilesystem" then the correct frame will be automatically added to the text files. this frame will not be in the final .txt files.
+   
+-ut, --usetesseract:
+   explanation: use tesseract instead of the cross correlation ccr developed in this project.
 ```
-if some attribute other than exportfilesystem is not given, a nice prompt-toolkit based UI will ask you for this information. it is recommended to use this UI when possible instead of the command line arguments for the sole reason that it is nicer.
+if some attribute other than exportfilesystem or usetesseract is not given, a nice prompt-toolkit based UI will ask you for this information. it is recommended to use this UI when possible instead of the command line arguments for the sole reason that it is nicer.
 > if -fs is not given, the UI will ask you to select a font out of all options available (the options for which a calibration file was made). you can also choose the option "find out for me", which will have the computer run with all possible font settings, and use the one with the best fit.  
 
 *it is usually recommended to print and scan files with a frame when possible.

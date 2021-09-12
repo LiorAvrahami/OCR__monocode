@@ -3,7 +3,7 @@ import typing
 from cross_correlation_letter_detector.do_cross_correlation_v1 import do_ccr_v1
 import pickle
 import os
-from handle_font_book_keepeing import get_list_of_all_fonts_in_inventory
+from .handle_font_book_keepeing import get_list_of_all_fonts_in_inventory
 
 def do_ccr(path,font=None,b_has_frame=True,frame_character = "X",corner_charicter="O") -> (float,str):
     #TODO use b_has_frame

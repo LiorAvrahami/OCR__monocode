@@ -40,7 +40,7 @@ atributes:
    example:
       python OCR_monocode.py -fs Consols 8 600dpi
 
--h, --hasnoframe:
+-n, --hasnoframe:
    -h [true or false, case insensative]
    explanation: there is an option to surround the paper with a frame of X, to increase percision. if using "--exportfilesystem" then the correct frame will be automatically added to the text files. this frame will not be in the final .txt files.
    

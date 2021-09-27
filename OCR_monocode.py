@@ -2,7 +2,7 @@ import argparse
 from efipy import run, inquire_output_path,inquire_input_path
 from cross_correlation_letter_detector.handle_font_book_keepeing import inquire_font
 
-import os,matplotlib.pyplot as plt
+import os
 from extract_code_with_crosscorrelation import process_image_to_text_with_ccr
 from extract_code_with_tesseract import process_image_to_text_with_tesseract
 import re
@@ -17,8 +17,6 @@ def str_to_bool(s):
 argparser = argparse.ArgumentParser(description="OCR program, that reads text from image and exports to text file.\nsee https://github.com/LiorAvrahami/OCR__monocode")
 argparser.add_argument("--exportfilesystem",action='store',nargs='?', default="false", const="true", choices=["true","false"],
                        help="if this atribute is added then no OCR will be used, intead, the selected input file or folder that represents the root of a file system, will be converted to a single .txt file that can be printed, and can later be scanned and mapped back to the origional file system hyrarchy")
-argparser.add_argument("--singletextfileoutput",action='store',nargs='?', default="false", const="true", choices=["true","false"],
-                       help="if selected output will be a single .txt file, no file system interpretation will be done. (so when using this flag there is no limmit on use of $ char)")
 argparser.add_argument("-i", "--inputpath",action='store', default=None,
                        help="select input path. may be a folder, or path to single file")
 argparser.add_argument("-o", "--outputpath",action='store', default=None,
@@ -31,17 +29,26 @@ argparser.add_argument("-t", "--usetesseract", action='store', nargs='?', defaul
                        help="use tesseract instead of the cross correlation ccr developed in this project.")
 
 user_arguments = argparser.parse_args()
-print(user_arguments)
 user_arguments.exportfilesystem = str_to_bool(user_arguments.exportfilesystem)
-user_arguments.singletextfileoutput = str_to_bool(user_arguments.singletextfileoutput)
 user_arguments.frame = str_to_bool(user_arguments.frame)
 user_arguments.usetesseract = str_to_bool(user_arguments.usetesseract)
 
 ### PROCESS USER INPUT
 
 # inquire input and output path if not given
-input_path = inquire_input_path(".") if user_arguments.inputpath is None else user_arguments.inputpath
-output_path = inquire_output_path(os.path.join(input_path,"OCR_monocode_OUT")) if user_arguments.outputpath is None else user_arguments.outputpath
+input_path = inquire_input_path("") if user_arguments.inputpath is None else user_arguments.inputpath
+errors_log_file_path = os.path.join(input_path,"OCR_errors.txt") if os.path.isdir(input_path) else os.path.join(os.path.dirname(input_path),"OCR_errors.txt")
+
+print(os.path.isdir(input_path))
+
+if os.path.isdir(input_path) or ((not os.path.isfile(input_path)) and "." not in os.path.basename(input_path)):
+    default_output = os.path.join(input_path,"OCR_monocode_OUT")
+elif os.path.isfile(input_path) or ((not os.path.isdir(input_path)) and "." in os.path.basename(input_path)):
+    default_output = os.path.join(os.path.dirname(input_path),"OCR_monocode_OUT")
+else:
+    raise ImportError("it should had been impossible to reach this code. some random number:1684654987135468")
+
+output_path = inquire_output_path(default_output) if user_arguments.outputpath is None else user_arguments.outputpath
 
 # if user wants to export some of their file system
 if user_arguments.exportfilesystem:
@@ -63,18 +70,59 @@ else:
 
 
 ### START RUNNING OCR
-out_str = ""
+out_strings = {}
 def process_image_to_text(path):
-    global out_str
+    global out_strings
     if ocr_Mechanism == "ccr":
-        out_str += process_image_to_text_with_ccr(path,selected_font_settings,b_has_frame= bool(user_arguments.frame))
+        out_strings[path] = process_image_to_text_with_ccr(path,selected_font_settings,b_has_frame= bool(user_arguments.frame))
     if ocr_Mechanism == "tesseract":
-        out_str += process_image_to_text_with_tesseract(path)
+        out_strings[path] = process_image_to_text_with_tesseract(path)
+
+run(process_image_to_text,root_path=input_path,files_filter="*.jpg",number_of_threads=3,errors_log_file=errors_log_file_path)
+
+### combine files strings into one long string
+out_str = ""
+out_str_with_page_names = ""
+for path in sorted(out_strings.keys()):
+    out_str += out_strings[path]
     if out_str[-1] != "\n":
         out_str += "\n"
+    out_str_with_page_names += f"-- %%% --\n" \
+                               f"-- %%% -- new page. path : {path}\n" \
+                               f"-- %%% --\n"
+    out_str_with_page_names += out_strings[path]
+    if out_str_with_page_names[-1] != "\n":
+        out_str_with_page_names += "\n"
 
-run(process_image_to_text,root_path=input_path,files_filter="*.jpg")
+### make output path
+if os.path.isfile(output_path):
+    output_dir = os.path.dirname(output_path)
+else:
+    output_dir = output_path
 
+def make_dir_recursive(path,depth=10):
+    try:
+        os.mkdir(path)
+    except:
+        if depth > 0:
+            make_dir_recursive(os.path.dirname(path), depth=depth - 1)
+            os.mkdir(path)
+        else:
+            raise Exception("path too deep")
+
+if not os.path.exists(output_dir):
+    try:
+        make_dir_recursive(output_dir)
+    except:
+        raise AttributeError("output_path too deep")
+
+### save combined string to file
+if os.path.isdir(output_path):
+    output_str_file = os.path.join(output_path,"raw_string_output.txt")
+else:
+    output_str_file = output_path
+with open(output_str_file, "w+") as f:
+    f.write(out_str_with_page_names)
 
 ### PROCESS OCR RESULTS AND WRITE TO FILE
 # fix small chars errors
@@ -82,40 +130,28 @@ for ch in [" _","  , "," ."," `","   -   "]:
     out_str = re.sub(re.escape(ch)," "*len(ch),out_str)
 out_str = re.sub(" *\n","\n",out_str)
 
-if not bool(user_arguments.singletextfileoutput):
-    # split text into file system
-    lines = out_str.split("\n")
-    for i in range(len(lines)):
-        if len(lines[i]) > 120 and i < len(lines) - 1:
-            lines[i] += lines[i + 1]
-            lines[i + 1] = ""
-    lines.append("$$q$$")
-    files = []
-    cur_file_name = None
-    cur_file_start = 0
-    for i in range(len(lines)):
-        if lines[i][:2] == "$$":
-            #eof found
-            if cur_file_name is not None:
-                files.append((cur_file_name,"\n".join(lines[cur_file_start:i])))
-            cur_file_start = i + 1
-            cur_file_name = re.match("\$\$(.+?)\$\$",lines[i]).groups()[0]
 
-    if os.path.isfile(output_path):
-        output_path = os.path.dirname(output_path)
+# split text into file system
+lines = out_str.split("\n")
+for i in range(len(lines)):
+    if len(lines[i]) > 120 and i < len(lines) - 1:
+        lines[i] += lines[i + 1]
+        lines[i + 1] = ""
+lines.append("$$q$$")
+files = []
+cur_file_name = None
+cur_file_start = 0
+for i in range(len(lines)):
+    if lines[i][:2] == "$$":
+        #eof found
+        if cur_file_name is not None:
+            files.append((cur_file_name,"\n".join(lines[cur_file_start:i])))
+        cur_file_start = i + 1
+        cur_file_name = re.match("\$\$(.+?)\$\$",lines[i]).groups()[0]
 
-    if not os.path.exists(output_path):
-        try:
-            os.mkdir(output_path)
-        except:
-            raise AttributeError("output_path too deep")
-
-    for file_name, content in files:
-        with open(os.path.join(output_path,file_name), "w+") as f:
-            f.write(content)
-else:
-    # write text to file
-    if not os.path.isfile(output_path):
-        output_path = os.path.join(output_path,"out.txt")
-    with open(output_path, "w+") as f:
-        f.write(out_str)
+for file_name, content in files:
+    target_path = os.path.join(output_dir, file_name)
+    if not os.path.exists(os.path.dirname(target_path)):
+        make_dir_recursive(os.path.dirname(target_path))
+    with open(target_path, "w+") as f:
+        f.write(content)

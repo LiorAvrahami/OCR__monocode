@@ -30,16 +30,19 @@ def grid_iterator_from_corners(num_of_rows,num_of_columns,quadrilateral_vertices
             bottom_left_pos[1] * (1 - part_x(x)) * (part_y(y)) + \
             bottom_right_pos[1] * (part_x(x)) * (part_y(y))
 
+    dx = np.gradient(gridx, axis=0)  # I do it this way because it seems more readable & less prone to bugs
+    dy = np.gradient(gridy, axis=1)  # I do it this way because it seems more readable & less prone to bugs
+
     if b_plot:
         if axes_object_to_plot is None:
             axes_object_to_plot = plt.axis()
         axes_object_to_plot.plot([top_left_pos[0], top_right_pos[0], bottom_left_pos[0], bottom_right_pos[0]],
                  [top_left_pos[1], top_right_pos[1], bottom_left_pos[1], bottom_right_pos[1]], "or", alpha=0.5)
         axes_object_to_plot.plot(gridx.flatten(), gridy.flatten(), "om", alpha=0.3)
+        for (_,_), box in grid_iterator_from_corners(num_of_rows,num_of_columns,quadrilateral_vertices,partial_cells_overlap = partial_cells_overlap,b_plot=False,axes_object_to_plot=axes_object_to_plot):
+            xb, yb = box
+            plt.plot([xb[0],xb[1],xb[1],xb[0],xb[0]],[yb[0],yb[0],yb[1],yb[1],yb[0]],"b")
         plt.show()
-
-    dx = np.gradient(gridx, axis=0)  # I do it this way because it seems more readable & less prone to bugs
-    dy = np.gradient(gridy, axis=1)  # I do it this way because it seems more readable & less prone to bugs
 
     for y_idx,x_idx in itertools.product(range(num_of_rows),range(num_of_columns)):
         box = (gridx[x_idx, y_idx] - dx[x_idx,y_idx]*(1 + partial_cells_overlap)**0.5 / 2, gridx[x_idx, y_idx] + dx[x_idx,y_idx]*(1 + partial_cells_overlap)**0.5 / 2),\

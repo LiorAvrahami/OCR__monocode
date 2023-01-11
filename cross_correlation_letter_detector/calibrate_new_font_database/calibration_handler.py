@@ -80,7 +80,11 @@ def add_new_font_with_calibration_file(scanned_calibration_file_path):
         if VERBOSITY >= 2:
             print("\'{}\' old best score {:.3g} optimized score {:.3g}".format(c, max(scores), score_image_sample(letters_images_ideal[c], c)))
 
-    with open("Consolas8_600dpi_db.pickle", "wb+") as f:
+    font_name = safer_prompt_toolkit.prompt("insert font name", default="ConSolas")
+    font_size = safer_prompt_toolkit.prompt("insert font size", default="8")
+    scan_res = safer_prompt_toolkit.prompt("insert scan resolution in dpi (this needs to be a number)", default="600")
+
+    with open(f"{font_name}{font_size}_{scan_res}dpi_db.pickle", "wb+") as f:
         pickle.dump(letters_images, f)
 
 
@@ -105,7 +109,7 @@ def get_frame_chars_images():
     return corner_char_image, frame_char_image
 
 
-def create_new_calibration_file(output_path,corner_char="O", frame_char="X"):
+def create_new_calibration_file(output_path, corner_char="O", frame_char="X"):
     font_name = safer_prompt_toolkit.prompt("insert font name", default="ConSolas")
     font_size = safer_prompt_toolkit.prompt("insert font size", default="8")
     page_width = safer_prompt_toolkit.prompt("insert number of characters in row of the page", default="125")
@@ -130,5 +134,5 @@ def create_new_calibration_file(output_path,corner_char="O", frame_char="X"):
 
     put_page_in_frame(page, page_width, page_height, corner_char, frame_char)
 
-    with open("output_path","w+") as f:
+    with open("output_path", "w+") as f:
         f.writelines(page)

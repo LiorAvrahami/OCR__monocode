@@ -19,10 +19,13 @@ this is done by mapping the howl file system to a single text file, which can be
 python \[path directories\]/OCR_monocode.py [atributes]
 
 atributes:
+-h:
+	for most up to date and error free help message
+
 --exportfilesystem:
    explanation: if this atribute is added then no OCR will be used, intead, the selected input file or folder that represents the root of a file system, will be converted to a single .txt file that can be printed, and can later be scanned and mapped back to the origional file system hyrarchy
 
---singletextfileoutput"
+--singletextfileoutput:
    explanation: if selected output will be a single .txt file, no file system interpretation will be done. (so when using this flag there is no limmit on use of $ char)
 
 -i, --inputpath:
@@ -38,17 +41,17 @@ atributes:
 -f, --fontselect:
    -f [font name] [font size] [scanner resolution]dpi
    example:
-      python OCR_monocode.py -fs Consols 8 600dpi
+      python OCR_monocode.py -f Consols 8 600dpi
 
 -n, --hasnoframe:
-   -h [true or false, case insensative]
+   -n [true or false, case insensative]
    explanation: there is an option to surround the paper with a frame of X, to increase percision. if using "--exportfilesystem" then the correct frame will be automatically added to the text files. this frame will not be in the final .txt files.
    
 -t, --usetesseract:
    explanation: use tesseract instead of the cross correlation ccr developed in this project.
 ```
 if some attribute other than exportfilesystem or usetesseract is not given, a nice prompt-toolkit based UI will ask you for this information. it is recommended to use this UI when possible instead of the command line arguments for the sole reason that it is nicer.
-> if -fs is not given, the UI will ask you to select a font out of all options available (the options for which a calibration file was made). you can also choose the option "find out for me", which will have the computer run with all possible font settings, and use the one with the best fit.  
+> if -f is not given, the UI will ask you to select a font out of all options available (the options for which a calibration file was made). you can also choose the option "find out for me", which will have the computer run with all possible font settings, and use the one with the best fit.  
 
 *it is usually recommended to print and scan files with a frame when possible.
 

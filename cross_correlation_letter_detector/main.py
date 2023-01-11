@@ -5,7 +5,7 @@ import pickle
 import os
 from .handle_font_book_keepeing import get_list_of_all_fonts_in_inventory
 
-def do_ccr(path,font=None,b_has_frame=True,frame_character = "X",corner_charicter="O",b_load_last_run=True) -> (float,str):
+def do_ccr(path,font=None,b_has_frame=True,frame_character = "X",corner_charicter="O",b_load_last_run=True,b_skip_ocr=False) -> (float,str):
     #TODO use b_has_frame
     if font is None:
         max_score_font = (float("-inf"),None,None)
@@ -17,7 +17,7 @@ def do_ccr(path,font=None,b_has_frame=True,frame_character = "X",corner_charicte
         return max_score_font[0],max_score_font[1]
     letters_db = load_character_map(font)
     path_for_dump_files = os.path.splitext(path)[0] + "_ocr_crosscorrelation_results"
-    return do_ccr_v2(path,letters_db,path_for_dump_files,frame_character,corner_charicter,b_load_last_run)
+    return do_ccr_v2(path,letters_db,path_for_dump_files,frame_character,corner_charicter,b_load_last_run,b_skip_ocr=b_skip_ocr)
 
 
 def load_character_map(font_settings) -> typing.Dict[str, np.ndarray]:
